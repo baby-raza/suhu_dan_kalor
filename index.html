@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Misi Menjadi Master Suhu & Kalor</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8ec;--ink:#243b53;--card:#fff;--ln:#d9c9a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1b2433;--ink:#f1f5f9;--card:#263349;--ln:#3b4d6b}}
+:root[data-theme=dark]{--bg:#1b2433;--ink:#f1f5f9;--card:#263349;--ln:#3b4d6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 'Baloo 2',system-ui,sans-serif}
+#app{max-width:640px;margin:auto;padding:14px}
+h1{font-size:1.6rem;line-height:1.2;margin:.2em 0}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 5px 0 var(--ink)}
+.b{display:block;width:100%;margin:8px 0;padding:11px;border:3px solid #243b53;border-radius:14px;background:#ffd166;color:#243b53;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #243b53;box-sizing:border-box}
+.b:active{transform:translateY(3px);box-shadow:none}
+.b.g{background:#caffbf}.b.s{background:#e9e9f5}.b.o{background:#fff;text-align:left}.b[disabled]{opacity:.4}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.cards .b{font-size:.8rem;margin:4px 0;padding:8px 4px}
+.sc{display:flex;justify-content:center;gap:10px;font-size:46px;flex-wrap:wrap;text-align:center;margin:8px 0;line-height:1.1}
+.sc svg{max-width:100%}
+input,select,textarea{font:inherit;padding:8px;border:2px solid var(--ink);border-radius:10px;margin:4px 0;width:100%;box-sizing:border-box;background:#fff;color:#243b53}
+.top{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}
+.tip{background:#fdffb6;color:#243b53;border-radius:12px;padding:8px 12px;margin:8px 0}
+.ok{font-size:2.4rem;text-align:center}
+table{width:100%;border-collapse:collapse;font-size:.78rem}td,th{border:1px solid var(--ln);padding:3px;text-align:center}
+.wrap{overflow-x:auto}
+:focus-visible{outline:3px solid #7b2cbf;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div id="app"></div>
+<script>
+const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const app=document.getElementById('app'),R=h=>{app.innerHTML=h;scrollTo(0,0)};
+const $=id=>document.getElementById(id);
+const sc=(...a)=>`<div class="sc">${a.map(x=>`<span>${x}</span>`).join('')}</div>`;
+const T=(v,mn,mx,ma,mi)=>{const y=x=>230-(x-mn)/(mx-mn)*200;let s='';for(let x=mn;x<=mx;x+=mi){const M=(x-mn)%ma===0;s+=`<line x1="${M?50:56}" x2="62" y1="${y(x)}" y2="${y(x)}" stroke="#345" stroke-width="${M?2:1}"/>`+(M?`<text x="46" y="${y(x)+4}" font-size="12" text-anchor="end" fill="#345">${x}</text>`:'')}return `<div class="sc"><svg viewBox="0 0 150 270" width="150" role="img" aria-label="Termometer"><rect x="62" y="20" width="16" height="215" rx="8" fill="#fff" stroke="#345" stroke-width="2"/><rect x="66" y="${y(v)}" width="8" height="${240-y(v)}" fill="#e63946"/><circle cx="70" cy="245" r="14" fill="#e63946" stroke="#345" stroke-width="2"/>${s}<text x="100" y="140" font-size="14" fill="#345">°C</text></svg></div>`};
+const M=(q,o,k,e,h,c,i,x)=>({t:'mc',q,o,k,e,h,c,i:i||'',...x});
+const NM=['Mencair','Membeku','Menguap','Mengembun','Menyublim','Mengkristal'],K3=['Konduksi','Konveksi','Radiasi'];
+const L=[
+{n:'Detektif Suhu',ic:'🌡️',co:'#ffd6a5',b:'🔍 Detektif Termometer',
+m:'Suhu adalah ukuran derajat panas atau dingin suatu benda. Alatnya termometer. Satuan SI-nya kelvin (K), sehari-hari kita pakai derajat Celsius (°C). Air membeku pada 0°C dan mendidih pada 100°C. Cara membaca: lihat ujung cairan merah, cari angka terdekat di bawahnya, lalu hitung garis kecilnya. Jangan menilai suhu dengan tangan, karena tangan bisa tertipu!',
+qs:[M('Berapa suhu yang ditunjukkan termometer?',['32°C','34°C','36°C','38°C'],1,'Ujung merah ada 2 garis kecil di atas angka 30. Tiap garis kecil = 2°C, jadi 30 + 4 = 34°C.','Cari angka 30, lalu hitung garis kecil di atasnya.','C1',T(34,0,50,10,2)),
+M('Berapa suhu yang ditunjukkan termometer?',['56°C','64°C','66°C','76°C'],2,'Setelah angka 60 ada 3 garis kecil, tiap garis 2°C: 60 + 6 = 66°C.','Berapa °C satu garis kecil?','C2',T(66,0,100,10,2)),
+M('Suhu ruangan 27°C. Berapa kelvin?',['246 K','273 K','300 K','327 K'],2,'K = °C + 273 = 27 + 273 = 300 K.','Tambahkan 273.','C3')]},
+{n:'Misteri Kalor',ic:'🧊',co:'#caffbf',b:'🧩 Pemecah Misteri Kalor',
+m:'Cerita: es batu 🧊 (0°C) dimasukkan ke teh panas ☕ (80°C). Es mencair, teh jadi lebih dingin. Kalor adalah energi yang berpindah dari benda bersuhu tinggi ke benda bersuhu lebih rendah. Benda yang melepas kalor suhunya turun. Benda yang menerima kalor suhunya naik atau wujudnya berubah. Suhu = ukuran panas-dingin. Kalor = energi yang berpindah (satuan joule).',
+qs:[M('Ke mana kalor berpindah?',['Dari es ke teh','Dari teh ke es','Tidak berpindah','Hanya ke udara'],1,'Kalor selalu berpindah dari suhu tinggi (teh 80°C) ke suhu rendah (es 0°C).','Kalor mengalir dari yang panas ke yang dingin.','C2',sc('☕ 80°C','➡️','🧊 0°C')),
+M('Mana yang menerima kalor?',['Es batu','Teh panas','Keduanya','Tidak ada'],0,'Es menerima kalor dari teh, sehingga mencair. Teh melepas kalor, sehingga suhunya turun.','Siapa yang berubah wujud?','C2',sc('🧊','🔄','☕')),
+M('Apakah suhu dan kalor merupakan hal yang sama?',['Sama, keduanya ukuran panas','Beda: suhu ukuran panas-dingin, kalor energi yang berpindah','Beda: suhu itu energi, kalor itu ukuran panas-dingin','Sama, hanya satuannya beda'],1,'Suhu menunjukkan derajat panas-dingin (°C). Kalor adalah energi yang berpindah (joule).','Satu ukuran, satu energi.','C2')]},
+{n:'Jalur Perpindahan Kalor',ic:'🧭',co:'#9bf6ff',b:'🧭 Penjelajah Jalur Kalor',
+m:'Kalor berpindah dengan 3 jalur. Konduksi: lewat benda padat, partikel bersentuhan, partikel tidak ikut pindah (contoh: logam). Konveksi: lewat fluida (air/udara), partikel ikut mengalir; yang panas naik, yang dingin turun. Radiasi: lewat pancaran, tidak butuh zat perantara (Matahari ke Bumi).',
+qs:[M('Sendok logam di teh panas, gagangnya ikut panas. Jalurnya?',K3,0,'Kalor merambat lewat logam (padat) yang bersentuhan: konduksi.','Ada zat padat yang bersentuhan.','C2',sc('🥄','☕','🔥')),
+M('Air di panci dipanaskan: air panas naik, air dingin turun. Jalurnya?',K3,1,'Partikel air ikut mengalir membawa kalor: konveksi.','Zat cair ikut bergerak.','C2',sc('🍲','⬆️⬇️','🔥')),
+M('Panas Matahari sampai ke Bumi melewati ruang hampa. Jalurnya?',K3,2,'Ruang hampa tidak punya zat perantara, jadi kalor merambat lewat radiasi.','Tidak ada zat di antara Matahari dan Bumi.','C2',sc('☀️','✨','🌍')),
+M('Pakaian dijemur terasa hangat karena sinar Matahari. Jalurnya?',K3,2,'Sinar Matahari memanaskan baju langsung: radiasi.','Panas datang dari sinar.','C2',sc('👕','☀️')),
+M('Gagang wajan besi ikut panas padahal tidak kena api. Jalurnya?',K3,0,'Kalor merambat sepanjang besi: konduksi.','Gagang dan wajan satu logam.','C3',sc('🍳','🔥','✋')),
+M('🎁 BONUS: AC dipasang di atas ruangan agar udara dingin turun merata. Jalurnya?',K3,1,'Udara dingin turun dan udara hangat naik: konveksi.','Udara adalah fluida.','C3',sc('❄️','🏠','⬇️'),{b:1})]},
+{n:'Laboratorium Suhu',ic:'🧪',co:'#bdb2ff',b:'🧪 Ilmuwan Laboratorium',
+m:'Rumus: Q = m × c × ΔT.<br>Q = kalor yang dibutuhkan (joule). m = massa benda (kg). c = kalor jenis, yaitu seberapa "sulit" zat dinaikkan suhunya (J/kg°C). ΔT = suhu akhir − suhu awal (°C).<br>Air c = 4.200; aluminium c = 900; besi c = 450. Makin besar massa atau ΔT, makin banyak kalor.',
+x:`<div class="tip"><b>Simulasi:</b> pilih lalu hitung Q.<select id="z"><option value="4200">Air (4200)</option><option value="900">Aluminium (900)</option><option value="450">Besi (450)</option></select>Massa (kg)<input id="ms" type="number" value="1" min="0.1" step="0.1">Suhu awal (°C)<input id="sa" type="number" value="20">Suhu akhir (°C)<input id="sf" type="number" value="30"><button class="b g" onclick="sim()">Hitung Q</button><b id="rs"></b></div>`,
+qs:[M('1 kg air dipanaskan dari 20°C ke 21°C (c air = 4.200). Berapa kalor yang dibutuhkan (J)?',0,4200,'Q = 1 × 4.200 × 1 = 4.200 J.','Kalikan m, c, dan ΔT.','C3','',{t:'num'}),
+M('Besi 2 kg dipanaskan dari 20°C ke 30°C (c besi = 450). Berapa kalor (J)?',0,9000,'ΔT = 10. Q = 2 × 450 × 10 = 9.000 J.','Cari ΔT dulu.','C3','',{t:'num'}),
+M('0,5 kg air dipanaskan dari 25°C ke 75°C (c = 4.200). Berapa kalor (J)?',0,105000,'ΔT = 50. Q = 0,5 × 4.200 × 50 = 105.000 J.','ΔT = 75 − 25.','C3','',{t:'num'})]},
+{n:'Misteri Perubahan Wujud',ic:'🔮',co:'#ffc6ff',b:'🔮 Penguasa Wujud',
+m:'Menyerap kalor: mencair (padat→cair), menguap (cair→gas), menyublim (padat→gas). Melepas kalor: membeku (cair→padat), mengembun (gas→cair), mengkristal (gas→padat). Contoh: es mencair, jemuran kering, kapur barus menyublim, embun di gelas es, bunga es di freezer.',
+qs:[M('Perubahan wujud apa yang terjadi?',NM,0,'Padat → cair, menyerap kalor. Contoh: es batu di gelas.','Padat menjadi cair.','C1',sc('🧊','➡️','💧')),
+M('Perubahan wujud apa yang terjadi?',NM,1,'Cair → padat, melepas kalor. Contoh: air di freezer jadi es.','Cair menjadi padat.','C1',sc('💧','➡️','🧊')),
+M('Perubahan wujud apa yang terjadi?',NM,2,'Cair → gas, menyerap kalor. Contoh: air jemuran menguap.','Cair menjadi gas.','C1',sc('💧','➡️','☁️')),
+M('Perubahan wujud apa yang terjadi?',NM,3,'Gas → cair, melepas kalor. Contoh: embun di gelas es.','Gas menjadi cair.','C1',sc('☁️','➡️','💦')),
+M('Kapur barus di lemari lama-lama mengecil dan hilang. Perubahan wujud apa?',NM,4,'Padat → gas langsung tanpa jadi cair: menyublim.','Tidak ada tahap cair.','C2',sc('⚪ kapur barus','➡️','🌫️')),
+M('Uap air di freezer langsung jadi bunga es. Perubahan wujud apa?',NM,5,'Gas → padat langsung: mengkristal.','Gas langsung menjadi padat.','C2',sc('☁️','➡️','❄️'))]},
+{n:'Bos Terakhir',ic:'👑',co:'#fdffb6',b:'👑 Master Suhu & Kalor',
+m:'Ayo gunakan semua jurusmu! Ingat: baca termometer teliti, kalor berpindah dari panas ke dingin, tiga jalur (konduksi, konveksi, radiasi), perubahan wujud menyerap atau melepas kalor, dan Q = m × c × ΔT.',
+qs:[M('Berapa suhu badan Dodi?',['37°C','38°C','39°C','40°C'],1,'Ada 3 garis kecil di atas 35, tiap garis 1°C: 35 + 3 = 38°C.','Tiap garis kecil bernilai 1°C.','C2',T(38,30,45,5,1)),
+M('Pilih SEMUA pernyataan yang benar tentang kalor.',['Kalor adalah energi','Kalor berpindah dari suhu rendah ke tinggi','Satuan kalor adalah joule','Suhu sama dengan kalor'],[0,2],'Kalor adalah energi (joule) yang berpindah dari suhu tinggi ke rendah. Suhu dan kalor berbeda.','Ada 2 jawaban benar.','C2','',{t:'multi'}),
+M('Benar atau salah: saat es mencair, es melepaskan kalor ke lingkungan.',['Benar','Salah'],1,'Salah. Es menyerap kalor saat mencair.','Mencair butuh atau melepas kalor?','C2'),
+M('Jodohkan jalur perpindahan kalor dengan contohnya.',['Sinar Matahari sampai ke Bumi','Sendok panas di teh','Air naik-turun saat mendidih'],[1,2,0],'Konduksi: sendok panas. Konveksi: air naik-turun. Radiasi: sinar Matahari.','Cari zat perantaranya.','C2','',{t:'match',l:K3}),
+M('Ada tetes air di luar gelas es. Mengapa?',['Air merembes lewat dinding gelas','Uap air di udara melepas kalor dan mengembun','Es menguap lalu menetes','Gelas berkeringat dari dalam'],1,'Gelas dingin menyerap kalor dari uap air di udara, sehingga uap mengembun.','Dari mana air itu berasal?','C3',sc('🥤','🧊','💦')),
+M('Air mendidih tetap 100°C walau terus dipanaskan. Mengapa?',['Kalor dipakai mengubah wujud cair menjadi gas','Api tidak panas lagi','Termometer rusak','Kalor hilang begitu saja'],0,'Saat berubah wujud, kalor dipakai untuk mengubah wujud, bukan menaikkan suhu.','Ke mana kalor digunakan?','C4',sc('🍲','🔥','♨️')),
+M('Siswa memanaskan 2 kg air dari 20°C ke 30°C (c = 4.200). Berapa kalor (J)?',0,84000,'ΔT = 10. Q = 2 × 4.200 × 10 = 84.000 J.','Q = m × c × ΔT.','C3','',{t:'num'}),
+M('Siang hari pasir pantai panas, tetapi laut lebih sejuk. Mengapa?',['Kalor jenis air besar, sehingga suhunya sulit naik','Pasir menerima lebih banyak sinar','Laut tidak menerima sinar Matahari','Air selalu lebih dingin dari pasir'],0,'Air punya kalor jenis besar, perlu banyak kalor untuk naik 1°C.','Bandingkan nilai c air dan pasir.','C4',sc('🏖️','🌊')),
+M('Panci dibuat dari logam, gagangnya plastik. Alasan paling tepat?',['Logam penghantar kalor yang baik, plastik penyekat','Logam lebih murah','Plastik lebih menarik','Logam lebih ringan'],0,'Logam konduktor agar makanan cepat panas, plastik isolator agar tangan aman.','Pikirkan konduktor dan isolator.','C4',sc('🍳','🔥','🧤')),
+M('Dijemur siang hari, baju hitam lebih panas daripada baju putih. Mengapa?',['Warna gelap menyerap lebih banyak radiasi','Warna putih menghasilkan dingin','Baju hitam lebih tebal','Hitam menarik angin'],0,'Permukaan gelap menyerap radiasi Matahari lebih banyak.','Radiasi diserap atau dipantulkan?','C4',sc('👕⚫','👕⚪','☀️'))]}];
+const MX=l=>L[l].qs.filter(q=>!q.b).length*10;
+const cat=p=>p>=90?['🏆 Master Suhu & Kalor','Luar biasa! Kamu menguasai suhu dan kalor. Ajak temanmu jadi master juga!']:p>=80?['⭐ Ahli Kalor','Hebat! Tinggal sedikit lagi menuju Master. Cek lagi soal yang masih keliru.']:p>=70?['🔥 Penjelajah Sains','Bagus! Terus berlatih, kamu di jalur yang benar.']:['🌱 Calon Detektif Sains','Detektif hebat selalu penasaran. Ulangi level yang sulit, kamu pasti bisa!'];
+let S;
+const LS=(k,v)=>{try{return v===undefined?JSON.parse(localStorage.getItem(k)||'[]'):localStorage.setItem(k,JSON.stringify(v))}catch(e){return[]}};
+function cover(){R(`<div class="card"><h1>🕵️ MISI MENJADI MASTER SUHU & KALOR</h1><p>Kamu adalah <b>Detektif Sains</b>. Kumpulkan ⭐, jaga ❤️❤️❤️, buka 6 level, dan jadilah Master!</p><input id="nm" placeholder="Nama kamu" autocomplete="off"><input id="kl" placeholder="Kelas (mis. VII-A)" autocomplete="off"><button class="b" onclick="start()">MULAI</button><button class="b g" onclick="how()">CARA BERMAIN</button><button class="b s" onclick="gl()">Mode Guru</button></div>`)}
+function how(){R(`<div class="card"><h1>Cara Bermain</h1><p>⭐ Jawaban benar = 10 poin. Pakai kartu bantuan = maksimal 5 poin. Jawaban salah = 0 poin dan ❤️ berkurang.<br>❤️ Ada 3 nyawa tiap level. Nyawa habis? Ulangi level.<br>🔓 Level terbuka satu per satu. 🏆 Tiap level beri badge.<br>🃏 Tiap level kamu punya 1 kartu masing-masing, pakai <b>sebelum</b> menjawab:<br>• Petunjuk: satu petunjuk<br>• Eliminasi: hapus satu jawaban salah<br>• Tanya Guru: penjelasan materi tambahan</p><button class="b" onclick="cover()">KEMBALI</button></div>`)}
+function start(){const n=$('nm').value.trim();if(!n){$('nm').focus();return}S={n,c:$('kl').value.trim(),u:0,st:[0,0,0,0,0,0],bon:0};map()}
+function map(){const t=S.st.reduce((a,b)=>a+b,0)+S.bon;R(`<div class="card"><div class="top"><span>🕵️ ${esc(S.n)}</span><span>⭐ ${t}</span></div><h1>🗺️ Peta Petualangan</h1>${L.map((l,i)=>`<button class="b" style="background:${l.co}" ${i>S.u?'disabled':''} onclick="intro(${i})">${i>S.u?'🔒':l.ic} Level ${i+1}: ${l.n} ${i<S.u?l.b.slice(0,2)+' ✅':''}</button>`).join('')}${S.u>5?'<button class="b g" onclick="fin2()">🔥 LIHAT HASIL AKHIR</button>':''}</div>`)}
+function intro(i){S.l=i;const l=L[i];R(`<div class="card" style="border-color:${l.co}"><h1>${l.ic} Level ${i+1}: ${l.n}</h1><p>${l.m}</p>${l.x||''}<button class="b" onclick="go()">MULAI MISI</button><button class="b s" onclick="map()">KEMBALI</button></div>`)}
+function sim(){const m=+$('ms').value,c=+$('z').value,d=$('sf').value-$('sa').value;$('rs').textContent=`Q = ${m} × ${c} × ${d} = ${m*c*d} J`}
+function go(){S.i=0;S.lv=3;S.lp=0;S.cd={h:1,e:1,t:1};ask()}
+const cq=()=>L[S.l].qs[S.i];
+function ask(){const q=cq(),l=L[S.l];S.hu=0;let a='';
+if(q.t=='mc')a=q.o.map((o,j)=>`<button class="b o" id="o${j}" onclick="ans(${j})">${o}</button>`).join('');
+else if(q.t=='multi')a=q.o.map((o,j)=>`<label class="b o" id="o${j}"><input type="checkbox" value="${j}" style="width:auto"> ${o}</label>`).join('')+'<button class="b g" onclick="cek()">CEK JAWABAN</button>';
+else if(q.t=='match')a=q.l.map((x,j)=>`<div><b>${x}</b><select id="m${j}"><option value="-1">pilih contoh…</option>${q.o.map((o,m)=>`<option value="${m}">${o}</option>`).join('')}</select></div>`).join('')+'<button class="b g" onclick="cek()">CEK JAWABAN</button>';
+else a='<input id="nu" inputmode="numeric" placeholder="Jawaban (dalam J)"><button class="b g" onclick="cek()">CEK JAWABAN</button>';
+const ne=q.t=='num'||q.t=='match';
+R(`<div class="card" style="border-color:${l.co}"><div class="top"><span>${l.ic} Level ${S.l+1} · soal ${S.i+1}/${l.qs.length}</span><span>${'❤️'.repeat(S.lv)} ⭐ ${S.lp}</span></div>${q.i}<p><b>${q.q}</b></p>${a}<div id="hn"></div><div class="cards"><button class="b s" id="ch" onclick="hlp('h')" ${S.cd.h?'':'disabled'}>🃏 Petunjuk</button><button class="b s" id="ce" onclick="hlp('e')" ${S.cd.e&&!ne?'':'disabled'}>🃏 Eliminasi</button><button class="b s" id="ct" onclick="hlp('t')" ${S.cd.t?'':'disabled'}>🃏 Tanya Guru</button></div></div>`)}
+function hlp(k){const q=cq();S.cd[k]=0;S.hu=1;$('c'+k).disabled=true;
+if(k=='h')$('hn').innerHTML=`<div class="tip">💡 ${q.h}</div>`;
+if(k=='t')$('hn').innerHTML=`<div class="tip">👩‍🏫 ${L[S.l].m}</div>`;
+if(k=='e'){const ks=[].concat(q.k),w=q.o.map((_,j)=>j).filter(j=>!ks.includes(j)&&$('o'+j).style.display!='none');if(w.length)$('o'+w[Math.floor(Math.random()*w.length)]).style.display='none'}}
+function ans(j){fin(j==cq().k?1:0)}
+function cek(){const q=cq();let f=0;
+if(q.t=='multi'){const s=[...document.querySelectorAll('input[type=checkbox]:checked')].map(x=>+x.value),r=s.filter(x=>q.k.includes(x)).length-s.filter(x=>!q.k.includes(x)).length;f=Math.max(0,r)/q.k.length}
+else if(q.t=='match'){f=q.l.filter((_,j)=>+$('m'+j).value===q.k[j]).length/q.l.length}
+else{f=parseFloat($('nu').value.replace(/[^\d,]/g,'').replace(',','.'))===q.k?1:0}
+fin(f)}
+const key=q=>q.t=='mc'?q.o[q.k]:q.t=='multi'?q.k.map(i=>q.o[i]).join('; '):q.t=='match'?q.l.map((x,j)=>x+' → '+q.o[q.k[j]]).join('; '):q.k.toLocaleString('id-ID')+' J';
+function fin(f){const q=cq();let p=f==1?10:f>=.5?5:0;if(S.hu)p=Math.min(p,5);if(q.b)S.bon+=p;else S.lp+=p;if(!p)S.lv--;
+R(`<div class="card"><div class="ok">${p==10?'🎉':p?'👍':'💔'}</div><h1 style="text-align:center">${p?'+'+p+' ⭐':'0 ⭐ · ❤️ berkurang'}</h1><p><b>Jawaban:</b> ${key(q)}</p><p>${q.e}</p><button class="b" onclick="nxt()">${S.lv<1?'LANJUT':S.i+1>=L[S.l].qs.length?'SELESAI LEVEL':'LANJUT'}</button></div>`)}
+function nxt(){if(S.lv<1)return R(`<div class="card"><div class="ok">💔</div><h1>Nyawa habis!</h1><p>Tenang, detektif hebat belajar dari kesalahan. Baca materinya lagi lalu coba ulang.</p><button class="b" onclick="intro(${S.l})">ULANGI LEVEL</button><button class="b s" onclick="map()">KE PETA</button></div>`);
+S.i++;if(S.i<L[S.l].qs.length)return ask();S.st[S.l]=S.lp;S.u=Math.max(S.u,S.l+1);const l=L[S.l];
+R(`<div class="card"><div class="ok">🏆</div><h1 style="text-align:center">Level ${S.l+1} selesai!</h1><p style="text-align:center">Badge baru: <b>${l.b}</b><br>⭐ ${S.lp} dari ${MX(S.l)}</p><button class="b" onclick="${S.l==5?'fin2()':'map()'}">${S.l==5?'LIHAT HASIL AKHIR':'LANJUT KE PETA'}</button></div>`)}
+function fin2(){const tot=S.st.reduce((a,b)=>a+b,0),mx=L.reduce((a,_,i)=>a+MX(i),0),p=Math.min(100,Math.round(tot/mx*100)),c=cat(p);
+const code=btoa(unescape(encodeURIComponent(JSON.stringify({n:S.n,c:S.c,p,s:S.st,b:S.bon}))));const lg=LS('sk_log');lg.push(code);LS('sk_log',lg);
+R(`<div class="card"><div class="ok">${c[0].slice(0,2)}</div><h1 style="text-align:center">${c[0].slice(3)}</h1><p style="text-align:center"><b>${p}%</b> · ⭐ ${tot}/${mx} · 🎁 bonus ${S.bon}</p><p>${c[1]}</p><p>${L.map(l=>l.b).join('<br>')}</p><p><b>Kode hasil</b> (tunjukkan atau kirim ke gurumu):</p><textarea id="cd" rows="3" readonly>${code}</textarea><button class="b g" onclick="$('cd').select();document.execCommand('copy')">SALIN KODE</button><button class="b" onclick="cover()">MAIN LAGI</button></div>`)}
+function gl(){R(`<div class="card"><h1>Mode Guru</h1><input id="pn" type="password" placeholder="PIN guru"><button class="b" onclick="$('pn').value==='GURU7'?gr():alert('PIN salah')">MASUK</button><button class="b s" onclick="cover()">KEMBALI</button></div>`)}
+let G=[];
+function gr(add){if(add)$('ta').value.split(/\s+/).filter(Boolean).forEach(c=>G.push(c));const rows=[...LS('sk_log'),...G].map(c=>{try{return JSON.parse(decodeURIComponent(escape(atob(c))))}catch(e){return null}}).filter(Boolean);
+const av=i=>rows.length?Math.round(rows.reduce((a,r)=>a+r.s[i]/MX(i)*100,0)/rows.length)+'%':'-';
+R(`<div class="card"><h1>👩‍🏫 Pantau Hasil</h1><p>Hasil di perangkat ini muncul otomatis. Untuk perangkat lain, tempel kode hasil siswa (satu per baris).</p><textarea id="ta" rows="3" placeholder="Tempel kode hasil…"></textarea><button class="b g" onclick="gr(1)">TAMBAH</button><div class="wrap"><table><tr><th>Nama</th><th>Kelas</th><th>%</th><th>Kategori</th>${L.map((_,i)=>`<th>L${i+1}</th>`).join('')}</tr>${rows.map(r=>`<tr><td>${esc(r.n)}</td><td>${esc(r.c)}</td><td>${r.p}</td><td>${cat(r.p)[0].slice(0,2)}</td>${r.s.map((v,i)=>`<td>${Math.round(v/MX(i)*100)}%</td>`).join('')}</tr>`).join('')}<tr><th colspan="4">Rata-rata</th>${L.map((_,i)=>`<th>${av(i)}</th>`).join('')}</tr></table></div><p>Level dengan rata-rata terendah perlu penguatan ulang.</p><button class="b" onclick="kn()">KUNCI & PEMBAHASAN</button><button class="b s" onclick="cover()">KELUAR</button></div>`)}
+function kn(){R(`<div class="card"><h1>🔑 Kunci Jawaban Guru</h1>${L.map((l,i)=>`<h3>${l.ic} Level ${i+1}: ${l.n}</h3>`+l.qs.map((q,j)=>`<details><summary>${j+1}. ${q.q.replace(/<[^>]+>/g,'')} (${q.c}, skor ${q.b?'bonus ':''}10)</summary><p><b>Kunci:</b> ${key(q)}<br>${q.e}</p></details>`).join('')).join('')}<button class="b" onclick="gr()">KEMBALI</button></div>`)}
+cover();
+</script></body></html>
